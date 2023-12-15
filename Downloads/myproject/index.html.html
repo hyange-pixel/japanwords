@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>일본어 한자 퀴즈</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-size: 25px;
+        }
+        #startQuiz {
+            background-color: beige;
+        }
+        .balloon {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            display: inline-block;
+            position: relative;
+            background-color: #F5F5F5;
+            margin-bottom: 20px;
+        }
+        .balloon:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 15px 15px 0;
+            border-color: #F5F5F5 transparent;
+            display: block;
+            width: 0;
+            z-index: 1;
+            bottom: -15px;
+            left: 45%;
+        }
+    </style>
+</head>
+<body>
+    <div class="balloon" id="welcome">반갑습니다!</div>
+    <button id="startQuiz">퀴즈 시작하기</button>
+    <div id="quiz" style="display: none;">
+        <p id="question"></p>
+        <input type="text" id="answer">
+        <button id="submitAnswer">제출</button>
+        <p id="result"></p>
+        <p id="explanation" style="display: none;"></p>
+        <button id="nextQuestion" style="display: none;">다음</button>
+    </div>
+    <div class="balloon" id="fighting" style="display: none;">파이팅!</div>
+    <script>
+        var questions = [
+            // 퀴즈 문제들
+        ];
+        var currentQuestion = 0;
+
+        function startQuiz() {
+            $('#startQuiz').hide();
+            $('#welcome').hide();
+            $('#fighting').show();
+            $('#quiz').show();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            $('#question').text(questions[currentQuestion].kanji);
+        }
+
+        function checkAnswer() {
+            var userAnswer = $('#answer').val();
+            if (questions[currentQuestion].answer.includes(userAnswer)) {
+                $('#result').text('정답입니다!');
+                $('#explanation').text(questions[currentQuestion].reading).show();
+                $('#nextQuestion').show();
+            } else {
+                $('#result').text('틀렸습니다. 다시 시도해주세요.');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                $('#answer').val('');
+                $('#result').text('');
+                $('#explanation').hide();
+                $('#nextQuestion').hide();
+                showQuestion();
+            } else {
+                $('#quiz').hide();
+                $('#startQuiz').show();
+                $('#fighting').hide();
+                $('#welcome').show();
+                currentQuestion = 0;
+            }
+        }
+
+        $('#startQuiz').click(startQuiz);
+        $('#submitAnswer').click(checkAnswer);
+        $('#nextQuestion').click(nextQuestion);
+    </script>
+</body>
+</html>
